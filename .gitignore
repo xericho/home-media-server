@@ -1,0 +1,8 @@
+.env
+nzbget/
+overseerr/
+plex/
+prowlarr/
+radarr/
+sonarr/
+bazarr/

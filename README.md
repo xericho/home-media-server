@@ -12,12 +12,12 @@ This is my automated home media server documentation.
 
 ### Docker containers
 - NZBget (downloader)
-- Overseer (automated content requester, integrates with Sonarr, Radarr and Plex)
+- Overseerr (automated content requester, integrates with Sonarr, Radarr and Plex)
 - Plex (media server and player)
 - Prowlarr (index manager for the *arrs)
 - Radarr (movie grabber)
 - Sonarr (TV show grabber)
-- Bazaar (subtitle grabber)
+- Bazarr (subtitle grabber)
 
 
 ## Folder structure
@@ -27,12 +27,12 @@ home-media-server
 ├── docker-compose.yml
 ├── .env
 ├── nzbget
-├── overseer
+├── overseerr
 ├── plex
 ├── prowlarr
 ├── radarr
 ├── sonarr
-└── bazaar
+└── bazarr
 ```
 
 ## Media folder structure 
