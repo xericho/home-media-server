@@ -1,0 +1,269 @@
+version: "3.5"
+
+services:
+  # gluetun:
+  #   image: qmcgaw/gluetun
+  #   container_name: gluetun-vpn
+  #   cap_add:
+  #     - NET_ADMIN
+  #   environment:
+  #     - VPN_SERVICE_PROVIDER=$VPNPROVIDER
+  #     - OPENVPN_USER=$GTUSER
+  #     - OPENVPN_PASSWORD=$GTPW
+  #     - SERVER_HOSTNAMES=$GTHOSTNAMES
+  #     - TZ=$TZ
+  #   volumes:
+  #     - ./gluetun:/config
+  #   ports:
+  #   # The container port(s) should be the ones needed 
+  #   # for the container you want to use the gluetun network
+  #     - 8080:8080
+  #     - 6881:6881
+  #     - 6881:6881/udp
+
+  # qbittorrent:
+  #   # image: markusmcnugen/qbittorrentvpn:latest
+  #   image: dyonr/qbittorrentvpn:latest
+  #   container_name: qbittorrent
+  #   cap_add:
+  #     - NET_ADMIN
+  #   # network_mode: bridge
+  #   privileged: true
+  #   environment:
+  #     - VPN_ENABLED=yes
+  #     - VPN_TYPE=openvpn
+  #     - LAN_NETWORK=$LAN_NETWORK
+  #     - VPN_USERNAME=$VPN_USERNAME
+  #     - VPN_PASSWORD=$VPN_PASSWORD
+  #     - PUID=$PUID
+  #     - PGID=$PGID
+  #     - INSTALL_PYTHON3=yes
+  #   volumes:
+  #     - ./qbit:/config
+  #     - $DOWNLOADDIRECTORY:/downloads
+  #   ports:
+  #     - 8080:8080
+  #     # - 8999:8999
+  #     # - 8999:8999/udp
+  #   devices:
+  #     - /dev/net/tun
+  #   restart: unless-stopped  
+
+  # transmission-openvpn:
+  #   container_name: transmission
+  #   image: haugene/transmission-openvpn:4.2
+  #   cap_add:
+  #     - NET_ADMIN
+  #   privileged: true
+  #   volumes:
+  #     - $DOWNLOADDIRECTORY:/data
+  #     - ./transmission:/config
+  #     - ./openvpn:/etc/openvpn/custom
+  #   environment:
+  #     - OPENVPN_PROVIDER=custom
+  #     - OPENVPN_CONFIG=9FA6DB55-E96A-5FFE-8B41-439578A6280B_us-la_openvpn
+  #     - OPENVPN_USERNAME=$VPN_USERNAME
+  #     - OPENVPN_PASSWORD=$VPN_PASSWORD
+  #     - LOCAL_NETWORK=$LAN_NETWORK
+  #     - PUID=$PUID
+  #     - PGID=$PGID
+  #     - TZ=$TZ
+  #     - TRANSMISSION_RPC_USERNAME=$TRANSISSION_USERNAME
+  #     - TRANSMISSION_RPC_PASSWORD=$TRANSMISSION_PASSWORD
+  #     - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
+  #     - PEER_DNS=true
+  #   dns:
+  #     - 8.8.8.8
+  #     - 8.8.4.4
+  #   logging:
+  #     driver: json-file
+  #     options:
+  #       max-size: 10m
+  #   ports:
+  #   - 9091:9091
+  #   restart: unless-stopped  
+
+  overseerr: # media requesting tool
+    image: sctx/overseerr:latest
+    container_name: overseerr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - ./overseerr:/app/config
+    ports:
+      - 5055:5055
+    restart: unless-stopped
+
+  plex: # Media Server
+    container_name: plex
+    image: cr.hotio.dev/hotio/plex
+    restart: unless-stopped
+    logging:
+      driver: json-file
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=002
+      - DEBUG=no
+      - PLEX_CLAIM=$PLEX_CLAIM
+      - PLEX_PASS=$PLEX_PASS
+      - ADVERTISE_IP=$PLEX_ADVERTISE_IP
+    volumes:
+      - ./plex:/config:rw
+      - $PLEXMEDIA:/data/media:rw
+      - /tmp:/transcode:rw
+    network_mode: host
+
+  prowlarr: #indexer manager for Sonarr & Radarr
+    image: ghcr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - ./prowlarr:/config
+    ports:
+      - 9696:9696
+    restart: unless-stopped
+
+  radarr: # movie search agent
+    image: ghcr.io/linuxserver/radarr
+    container_name: radarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=022
+    volumes:
+      - ./radarr:/config
+      - $MEDIADIR:/media
+    ports:
+      - 7878:7878
+    restart: unless-stopped
+
+  sonarr: # TV show search agent
+    image: ghcr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - UMASK=022
+    volumes:
+      - ./sonarr:/config
+      - $MEDIADIR:/media
+    ports:
+      - 8989:8989
+    restart: unless-stopped
+
+  bazarr: # subtitle grabber
+    image: ghcr.io/linuxserver/bazarr
+    container_name: bazarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - ./bazarr:/config
+      - $MEDIADIR/media/movies:/movies 
+      - $MEDIADIR/media/tv:/tv 
+    ports:
+      - 6767:6767
+    restart: unless-stopped
+
+  nzbget: # usenet download agent
+    image: ghcr.io/linuxserver/nzbget
+    container_name: nzbget
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - ./nzbget:/config
+      - $MEDIADIR/usenet:/media/usenet
+    ports:
+      - 6789:6789
+    restart: unless-stopped
+
+  # ombi: # media requesting tool
+  #   container_name: ombi
+  #   image: lscr.io/linuxserver/ombi:latest
+  #   ports:
+  #     - 3579:3579
+  #   environment:
+  #     - PUID=$PUID
+  #     - PGID=$PGID
+  #     - TZ=$TZ
+  #     - UMASK=002
+  #     - ARGS
+  #     - DEBUG=no
+  #   volumes:
+  #     - ./ombi:/config
+
+  # lidarr-extended:
+  #   image: randomninjaatk/lidarr-extended:latest
+  #   container_name: lidarr-extended
+  #   volumes:
+  #     - ./lidarr:/config
+  #     - $MEDIADIR:/downloads-lidarr-extended
+  #     - $MEDIADIR:/media
+  #     - $MEDIADIR/media/music videos:/music-videos
+  #     - $LOCALTIME
+  #   environment:
+  #     - PUID=$PUID
+  #     - PGID=$PGID
+  #     - autoStart=true
+  #     - enableAudioScript=true
+  #     - enableVideoScript=true #     - scriptInterval=15m
+  #     - configureLidarrWithOptimalSettings=true
+  #     - searchSort=date
+  #     - audioFormat=native
+  #     - audioBitrate=lossless
+  #     - requireQuality=true
+  #     - enableReplaygainTags=true
+  #     - dlClientSource=both #change to `deezer` or `tidal` if you only use one
+  #     - arlToken=$ARLTOKEN #remove this line if not using deezer
+  #     - tidalCountryCode=$TIDALCOUNTRY #remove line if not using tidal
+  #     - audioLyricType=both
+  #     - addDeezerTopArtists=true
+  #     - addDeezerTopAlbumArtists=false
+  #     - addDeezerTopTrackArtists=false
+  #     - topLimit=10
+  #     - addRelatedArtists=false
+  #     - numberOfRelatedArtistsToAddPerArtist=5
+  #     - addFeaturedVideoArtists=false
+  #     - plexUrl=PLEX_ADVERTISE_IP
+  #     - plexToken=$PLEXTOKEN
+  #     - youtubeSubtitleLanguage=en
+  #     - enableQueueCleaner=true
+  #     - matchDistance=5
+  #   ports:
+  #     - 8686:8686
+  #   restart: unless-stopped
+
+  # tautulli: #plex monitoring
+  #   image: ghcr.io/linuxserver/tautulli:latest
+  #   container_name: tautulli
+  #   environment:
+  #     - PUID=$PUID
+  #     - PGID=$PGID
+  #     - TZ=$TZ
+  #     - UMASK=002
+  #     - DEBUG=no
+  #   volumes:
+  #     - ./tautulli:/config
+  #   ports:
+  #     - 8181:8181
+  #   restart: unless-stopped
+
+
+##############NETWORKS##############
+networks:
+  default:
+    name: media_vpn
+    external: true
+
