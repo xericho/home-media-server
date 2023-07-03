@@ -25,14 +25,13 @@ services:
       - PGID=$PGID
       - TZ=$TZ
       - UMASK=002
-      - DEBUG=no
       - PLEX_CLAIM=$PLEX_CLAIM
       - PLEX_PASS=$PLEX_PASS
       - ADVERTISE_IP=$PLEX_ADVERTISE_IP
     volumes:
-      - ./plex:/config:rw
-      - $PLEXMEDIA:/data/media:rw
-      - /tmp:/transcode:rw
+      - ./plex:/config
+      - $PLEXMEDIA:/data/media
+      - /tmp:/transcode
     network_mode: host
 
   prowlarr: # indexer manager for Sonarr & Radarr
@@ -87,8 +86,7 @@ services:
       - TZ=$TZ
     volumes:
       - ./bazarr:/config
-      - $MEDIADIR/media/movies:/movies 
-      - $MEDIADIR/media/tv:/tv 
+      - $MEDIADIR:/media
     ports:
       - 6767:6767
     restart: unless-stopped
@@ -109,6 +107,6 @@ services:
 
 networks:
   default:
-    name: media_vpn
+    name: media_server
     external: true
 
