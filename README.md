@@ -47,31 +47,32 @@ media_files
 	└── tv
 ```
 
-## Remove Access 
+## Remote Access 
 ### Plex
+Configure this to remove the 1Mbps limit when watching media outside LAN.
 1. Port forward 32400 to your media server in your router/modem (http://192.168.1.254/).
 1. Check that it's open using https://www.yougetsignal.com/tools/open-ports/.
 1. Open 32400 in your firewall settings:
     ```
     sudo ufw allow 32400
     ```
-1. Go to Settings > Remote Access. Manually specify port 32400 and click Apply.
+1. In Plex, go to Settings > Remote Access. Manually specify port 32400 and click Apply.
 
 ### Other containers
 1. Create a Cloudflare account and add your domain name (https://developers.cloudflare.com/fundamentals/get-started/setup/add-site/)
 1. Go to DNS and add an A record to point to your server's WAN (public) IP. 
 1. Go to SSL/TLS and select Full (strict) as encryption mode. 
 1. Go to SSL/TLS > Edge Certificates and enable:
-- Always Use HTTPS
-- Automatic HTTPS Rewrites
+    - Always Use HTTPS
+    - Automatic HTTPS Rewrites
 1. Go to your Cloudflare profile > API Tokens > Create Token. Select Edit zone DNS and include your zone. Create and note the API token.
 1. Go to Nginx Proxy Manager (port 81) and add a proxy host:
-- Domian name: same one from the A recrod
-- Scheme: http 
-- Forward Hostname/IP: **use the docker container name, not LAN IP** (e.g. `overseerr`)
-- Forward port: the corresponding port (e.g. 5055)
-- Enable Cache Assets and Block Common Exploits
-- In SSL, request a new SSL certificate. Select Use a DNS Challenge, choose Cloudflare, and paste the API Token from earlier. Also enable Force SSL and HTTP/2 Support. 
+    - Domian name: same one from the A recrod
+    - Scheme: http 
+    - Forward Hostname/IP: **use the docker container name, not LAN IP** (e.g. `overseerr`)
+    - Forward port: the corresponding port (e.g. 5055)
+    - Enable Cache Assets and Block Common Exploits
+    - In SSL, request a new SSL certificate. Select Use a DNS Challenge, choose Cloudflare, and paste the API Token from earlier. Also enable Force SSL and HTTP/2 Support. 
 1. Port forward 80 and 443 to your media server in your router/modem (http://192.168.1.254/).
 1. Check that it's open using https://www.yougetsignal.com/tools/open-ports/.
 1. Open 80 and 443 in your firewall settings:
