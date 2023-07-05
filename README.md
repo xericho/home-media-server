@@ -17,6 +17,7 @@ This is my automated home media server documentation.
 - Sonarr (TV show grabber)
 - Bazarr (subtitle grabber)
 - Nginx Proxy Manager (reverse proxy for overseerr)
+- Fail2ban (prevents brute force attacks)
 
 
 ## Folder structure
@@ -27,6 +28,7 @@ home-media-server
 ├── docker-compose.npm.yml
 ├── .env
 ├── npm
+├── fail2ban
 ├── nzbget
 ├── overseerr
 ├── plex
@@ -81,8 +83,12 @@ Configure this to remove the 1Mbps limit when watching media outside LAN.
     sudo ufw allow https
     ```
 
+## Fail2ban
+We will use fail2ban as an extra security measure for brute force attacks. Follow this (guide)[https://dbt3ch.com/books/fail2ban/page/how-to-install-and-configure-fail2ban-to-work-with-nginx-proxy-manager] to set up the container. For simplicity, use the `npm/nginx.conf` file instead of editing `npm`'s container files. 
+
 ## Resources
 - https://academy.pointtosource.com/containers/all-in-one-media-server-docker
 - https://wiki.servarr.com/
 - https://trash-guides.info/
 - https://www.youtube.com/watch?v=GarMdDTAZJo
+- https://dbt3ch.com/books/fail2ban/page/how-to-install-and-configure-fail2ban-to-work-with-nginx-proxy-manager
