@@ -86,6 +86,12 @@ Configure this to remove the 1Mbps limit when watching media outside LAN.
 ## Fail2ban
 We will use fail2ban as an extra security measure for brute force attacks. Follow this [guide](https://dbt3ch.com/books/fail2ban/page/how-to-install-and-configure-fail2ban-to-work-with-nginx-proxy-manager) to set it up. For simplicity, use the `npm/nginx.conf` file instead of editing `npm`'s container files. It will be blind mounted in `docker-compose.npm.yml`.
 
+You can view all banned IPs using
+```
+sudo docker exec -it fail2ban bash   
+fail2ban-client status npm-docker
+```
+
 ## GoAccess 
 You can view your traffic in a dashboard by running
 ```
