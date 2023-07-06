@@ -2,7 +2,14 @@
 
 This is my automated home media server documentation.
 
+## Prerequisites
+- A Cloudflare account
+- `docker` and `docker-compose` installed
+- Linux OS preferred (e.g. Ubuntu 23.04)
+- Access to your internet gateway user interface
+
 ## Tech stack
+
 ### Usenet
 - FrugalUsenet (provider)
 - NZBFinder (indexer)
@@ -18,7 +25,7 @@ This is my automated home media server documentation.
 - Bazarr (subtitle grabber)
 - Nginx Proxy Manager (reverse proxy for overseerr)
 - Fail2ban (prevents brute force attacks)
-
+- Authentik (user authentication and authorization)
 
 ## Folder structure
 There will be a folder for each docker container in `docker-compose.yml` so they can be blind mounted to. This is make backups and configurations easier to manage. 
@@ -29,6 +36,7 @@ home-media-server
 ├── .env
 ├── npm
 ├── fail2ban
+├── authentik
 ├── nzbget
 ├── overseerr
 ├── plex
@@ -98,9 +106,16 @@ You can view your traffic in a dashboard by running
 sudo docker compose -f docker-compose.goaccess.yml up
 ```
 
+## Authentik
+Follow this [guide](https://geekscircuit.com/set-up-authentik-sso-with-nginx-proxy-manager). When adding the proxy pass in NPM, use the docker container name:
+```
+proxy_pass  http://authentik-server:9000/outpost.goauthentik.io;
+```
+
 ## Resources
 - https://academy.pointtosource.com/containers/all-in-one-media-server-docker
 - https://wiki.servarr.com/
 - https://trash-guides.info/
 - https://www.youtube.com/watch?v=GarMdDTAZJo
 - https://dbt3ch.com/books/fail2ban/page/how-to-install-and-configure-fail2ban-to-work-with-nginx-proxy-manager
+- https://geekscircuit.com/set-up-authentik-sso-with-nginx-proxy-manager

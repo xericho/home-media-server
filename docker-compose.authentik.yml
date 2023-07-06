@@ -1,0 +1,85 @@
+version: "3.5"
+
+services:
+  postgresql:
+    image: docker.io/library/postgres:12-alpine
+    container_name: postgresql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 5s
+    volumes:
+      - database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=$PG_USER
+      - POSTGRES_DB=$PG_DB
+      - POSTGRES_PASSWORD=$PG_PASS
+  redis:
+    image: docker.io/library/redis:alpine
+    container_name: redis
+    command: --save 60 1 --loglevel warning
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      start_period: 20s
+      interval: 30s
+      retries: 5
+      timeout: 3s
+    volumes:
+      - redis:/data
+  server:
+    image: ghcr.io/goauthentik/server:2023.5.4
+    container_name: authentik-server
+    restart: unless-stopped
+    command: server
+    environment:
+      - AUTHENTIK_REDIS__HOST=redis
+      - AUTHENTIK_POSTGRESQL__HOST=postgresql
+      - AUTHENTIK_POSTGRESQL__USER=$PG_USER
+      - AUTHENTIK_POSTGRESQL__NAME=$PG_DB
+      - AUTHENTIK_POSTGRESQL__PASSWORD=$PG_PASS
+      - AUTHENTIK_SECRET_KEY=$AUTHENTIK_SECRET_KEY
+    volumes:
+      - ./authentik/media:/media
+      - ./authentik/custom-templates:/templates
+    ports:
+      - 9000:9000
+      - 9443:9443
+    depends_on:
+      - postgresql
+      - redis
+  worker:
+    image: ghcr.io/goauthentik/server:2023.5.4
+    container_name: authentik-worker
+    restart: unless-stopped
+    command: worker
+    environment:
+      - AUTHENTIK_REDIS__HOST=redis
+      - AUTHENTIK_POSTGRESQL__HOST=postgresql
+      - AUTHENTIK_POSTGRESQL__USER=$PG_USER
+      - AUTHENTIK_POSTGRESQL__NAME=$PG_DB
+      - AUTHENTIK_POSTGRESQL__PASSWORD=$PG_PASS
+      - AUTHENTIK_SECRET_KEY=$AUTHENTIK_SECRET_KEY
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./authentik/media:/media
+      - ./authentik/certs:/certs
+      - ./authentik/custom-templates:/templates
+    depends_on:
+      - postgresql
+      - redis
+
+volumes:
+  database:
+    driver: local
+  redis:
+    driver: local
+
+networks:
+  default:
+    name: media_server
+    external: true
+
