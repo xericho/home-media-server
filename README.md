@@ -100,17 +100,27 @@ sudo docker exec -it fail2ban bash
 fail2ban-client status npm-docker
 ```
 
-## GoAccess 
-You can view your traffic in a dashboard by running
-```
-sudo docker compose -f docker-compose.goaccess.yml up
-```
 
 ## Authentik
 Follow this [guide](https://geekscircuit.com/set-up-authentik-sso-with-nginx-proxy-manager). When adding the proxy pass in NPM, use the docker container name:
 ```
 proxy_pass  http://authentik-server:9000/outpost.goauthentik.io;
 ```
+
+## GoAccess 
+When using Authentik with GoAccess, add this to NPM proxy host advanced to fix websocket connection:
+```
+location / {
+    # Put your proxy_pass to your application here
+    proxy_pass          $forward_scheme://$server:$port;
+    # Set any other headers your application might need
+    # proxy_set_header Host $host;
+    # proxy_set_header ...
+    proxy_set_header Upgrade $http_upgrade;   # Add this line
+    ...
+}
+```
+
 
 ## Resources
 - https://academy.pointtosource.com/containers/all-in-one-media-server-docker
