@@ -31,7 +31,6 @@ services:
     volumes:
       - ./plex:/config
       - $PLEXMEDIA:/data/media
-      - /tmp:/transcode
     network_mode: host
 
   prowlarr: # indexer manager for Sonarr & Radarr
