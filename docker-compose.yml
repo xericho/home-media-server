@@ -90,6 +90,20 @@ services:
       - 6767:6767
     restart: unless-stopped
 
+  readarr: # ebook/audiobook grabber
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    volumes:
+      - ./readarr:/config
+      - $MEDIADIR:/media
+    ports:
+      - 8787:8787
+    restart: unless-stopped
+
   nzbget: # usenet download agent
     image: ghcr.io/linuxserver/nzbget
     container_name: nzbget
