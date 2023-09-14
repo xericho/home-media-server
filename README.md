@@ -12,6 +12,7 @@ This is my automated home media server documentation.
 
 ### Usenet
 - FrugalUsenet (provider)
+- DunkenSlug (indexer)
 - NZBFinder (indexer)
 - NZBgeek (optional indexer)
 
@@ -23,10 +24,14 @@ This is my automated home media server documentation.
 - Radarr (movie grabber)
 - Sonarr (TV show grabber)
 - Bazarr (subtitle grabber)
+- Readarr (ebook/audiobook grabber)
 
 ### Authentication/Authorization
 - Cloudflare Tunnel
 - Cloudflare Access
+
+### Audiobook App
+- Prologue (connects with Plex)
 
 ## Folder structure
 There will be a folder for each docker container in `docker-compose.yml` so they can be blind mounted to. This is make backups and configurations easier to manage. 
@@ -41,7 +46,8 @@ home-media-server
 ├── prowlarr
 ├── radarr
 ├── sonarr
-└── bazarr
+├── bazarr
+└── readarr
 ```
 
 ## Media folder structure 
@@ -52,7 +58,8 @@ media_files
 ├── torrents (optional)
 └── libraries
 	├── movies
-	└── tv
+	├── tv
+	└── books
 ```
 
 ## Remote Access 
@@ -85,3 +92,4 @@ Configure this to remove the 1Mbps limit when watching media outside LAN.
 - https://dbt3ch.com/books/fail2ban/page/how-to-install-and-configure-fail2ban-to-work-with-nginx-proxy-manager
 - https://geekscircuit.com/set-up-authentik-sso-with-nginx-proxy-manager
 - https://www.youtube.com/watch?v=eojWaJQvqiw
+- https://github.com/seanap/Plex-Audiobook-Guide
