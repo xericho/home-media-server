@@ -7,6 +7,7 @@ This is my automated home media server documentation.
 - `docker` and `docker-compose` installed
 - Linux OS preferred (e.g. Ubuntu 23.04)
 - Access to your internet gateway user interface
+- A domain name
 
 ## Tech stack
 
@@ -25,6 +26,7 @@ This is my automated home media server documentation.
 - Sonarr (TV show grabber)
 - Bazarr (subtitle grabber)
 - Readarr (ebook/audiobook grabber)
+- Ntfy (notfications)
 
 ### Authentication/Authorization
 - Cloudflare Tunnel
@@ -40,6 +42,7 @@ home-media-server
 ├── docker-compose.yml
 ├── docker-compose.cftunnel.yml
 ├── .env
+├── ntfy
 ├── nzbget
 ├── overseerr
 ├── plex
@@ -93,3 +96,4 @@ Configure this to remove the 1Mbps limit when watching media outside LAN.
 - https://geekscircuit.com/set-up-authentik-sso-with-nginx-proxy-manager
 - https://www.youtube.com/watch?v=eojWaJQvqiw
 - https://github.com/seanap/Plex-Audiobook-Guide
+- https://docs.ntfy.sh/install/

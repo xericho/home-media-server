@@ -1,0 +1,23 @@
+version: "3.5"
+
+services:
+  ntfy:
+    container_name: ntfy
+    image: binwiederhier/ntfy 
+    command: serve
+    volumes:
+      - /var/cache/ntfy:/var/cache/ntfy
+      - ./ntfy:/etc/ntfy
+    ports:
+      - 8000:80
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+    restart: unless-stopped
+
+networks:
+  default:
+    name: media_server
+    external: true
+

@@ -33,7 +33,7 @@ services:
       - $PLEXMEDIA:/data/media
     network_mode: host
 
-  prowlarr: # indexer manager for Sonarr & Radarr
+  prowlarr: # indexer manager for the *arrs
     image: ghcr.io/linuxserver/prowlarr:develop
     container_name: prowlarr
     environment:
