@@ -11,3 +11,4 @@ fail2ban/
 authentik/
 readarr/
 server.yml
+user.db
