@@ -35,12 +35,16 @@ This is my automated home media server documentation.
 ### Audiobook App
 - Prologue (connects with Plex)
 
+### Notification App 
+- Ntfy (available on iOS and Android)
+
 ## Folder structure
 There will be a folder for each docker container in `docker-compose.yml` so they can be blind mounted to. This is make backups and configurations easier to manage. 
 ```
 home-media-server
 ├── docker-compose.yml
 ├── docker-compose.cftunnel.yml
+├── docker-compose.ntfy.yml
 ├── .env
 ├── ntfy
 ├── nzbget
@@ -54,7 +58,7 @@ home-media-server
 ```
 
 ## Media folder structure 
-This is your folder structure for all your media files. NZBGet will put all downloads in the `usenet` directory and the *arrs will move them in the corresponding folders in `libraries`. Plex will only be synced to the `libraries` directory.
+This is your folder structure for all your media files (e.g. ~/media_files/). NZBGet will put all downloads in the `usenet` directory and the *arrs will move them in the corresponding folders in `libraries`. Plex will only be synced to the `libraries` directory.
 ```
 media_files
 ├── usenet
@@ -67,9 +71,9 @@ media_files
 
 ## Setup
 ### Docker containers
-Start each docker compose file separately:
+Configure the `.env` file and run the main docker compose file:
 ```
-sudo docker compose -f docker-compose-file.yml up -d
+sudo docker compose up -d
 ```
 
 ### Plex
@@ -82,15 +86,19 @@ Configure this to remove the 1Mbps limit when watching media outside LAN.
     ```
 1. In Plex, go to Settings > Remote Access. Manually specify port 32400 and click Apply.
 
-### Everything else
+### Cloudflare Tunnel
 1. Create a Cloudflare account and add your domain name (https://developers.cloudflare.com/fundamentals/get-started/setup/add-site/)
 1. Go to SSL/TLS and select Full (strict) as encryption mode. 
 1. Go to SSL/TLS > Edge Certificates and enable:
     - Always Use HTTPS
     - Automatic HTTPS Rewrites
-1. Create an Access Group.
-1. Setup Cloudflare Access for each container with the access group.
-1. Setup Cloudflare Tunnel and add public hostname for each container.
+1. Go to Cloudflare Zero Trust > Access > Tunnels and create a tunnel.
+    - This is where you will get the `CF_TUNNEL_TOKEN` for your `.env`.
+    - In Pubilc Hostname tab, create a hostname for each container. Note that the
+    service URL is the **container's name** (e.g. `overseerr:5055`).
+1. At this point, your containers are publicly accessible. Go to Cloudflare Zero Trust > Access > Access Groups and create an Access Group.
+1. Go to Cloudflare Zero Trust > Access > Applications and add an application for each 
+public hostname with the access group you created so it is under authentication. 
 
 ### Ntfy
 Notifications to your phone are done using [ntfy](https://docs.ntfy.sh/). Note that your ntfy server should
