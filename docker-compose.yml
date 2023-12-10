@@ -56,6 +56,7 @@ services:
       - UMASK=022
     volumes:
       - ./radarr:/config
+      - ./ntfy:/ntfy
       - $MEDIADIR:/media
     ports:
       - 7878:7878
@@ -71,6 +72,7 @@ services:
       - UMASK=022
     volumes:
       - ./sonarr:/config
+      - ./ntfy:/ntfy
       - $MEDIADIR:/media
     ports:
       - 8989:8989

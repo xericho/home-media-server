@@ -65,12 +65,18 @@ media_files
 	└── books
 ```
 
-## Remote Access 
+## Setup
+### Docker containers
+Start each docker compose file separately:
+```
+sudo docker compose -f docker-compose-file.yml up -d
+```
+
 ### Plex
 Configure this to remove the 1Mbps limit when watching media outside LAN.
-1. Port forward 32400 to your media server in your router/modem (http://192.168.1.254/).
+1. Port forward 32400 to your media server in your router/modem.
 1. Check that it's open using https://www.yougetsignal.com/tools/open-ports/.
-1. Open 32400 in your firewall settings:
+1. Open 32400 in your OS's firewall settings:
     ```
     sudo ufw allow 32400
     ```
@@ -86,6 +92,14 @@ Configure this to remove the 1Mbps limit when watching media outside LAN.
 1. Setup Cloudflare Access for each container with the access group.
 1. Setup Cloudflare Tunnel and add public hostname for each container.
 
+### Ntfy
+Notifications to your phone are done using [ntfy](https://docs.ntfy.sh/). Note that your ntfy server should
+not be under Cloudflare Access. Authentication should be configured using 
+[Access Control Lists](https://docs.ntfy.sh/config/#access-control). Configure 
+notifications for Radarr and Sonarr by setting up your `ntfy/.env` and 
+going to Radarr/Sonarr > Settings > Connect > Add > Custom Script 
+and select the corresponding script in `ntfy/`. 
+
 
 ## Resources
 - https://academy.pointtosource.com/containers/all-in-one-media-server-docker
@@ -97,3 +111,4 @@ Configure this to remove the 1Mbps limit when watching media outside LAN.
 - https://www.youtube.com/watch?v=eojWaJQvqiw
 - https://github.com/seanap/Plex-Audiobook-Guide
 - https://docs.ntfy.sh/install/
+- https://github.com/nickexyz/ntfy-shellscripts
