@@ -64,9 +64,9 @@ media_files
 ├── usenet
 ├── torrents (optional)
 └── libraries
-	├── movies
-	├── tv
-	└── books
+    ├── movies
+    ├── tv
+    └── books
 ```
 
 ## Setup
