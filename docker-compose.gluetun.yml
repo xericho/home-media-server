@@ -1,0 +1,43 @@
+version: "3.5"
+
+services:
+  gluetun:
+    image: qmcgaw/gluetun:v3.36
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8090:8090
+    environment:
+      - FIREWALL=off
+      - VPN_SERVICE_PROVIDER=custom
+      - OPENVPN_CUSTOM_CONFIG=/gluetun/custom.conf
+      - OPENVPN_CIPHERS=AES-256-CBC
+      - OPENVPN_PORT=1197
+      - OPENVPN_USER=$OPENVPN_USER
+      - OPENVPN_PASSWORD=$OPENVPN_PASSWORD
+    volumes:
+      - ./gluetun:/gluetun
+    networks:
+      vpn:
+
+  qbit:
+    image: linuxserver/qbittorrent:4.6.2
+    container_name: qbit
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      - WEBUI_PORT=8090
+    volumes:
+      - ./qbittorrent:/config
+      - $MEDIADIR/torrents:/downloads:rw
+    network_mode: service:gluetun # run on the vpn network
+    depends_on:
+      gluetun:
+        condition: service_healthy
+    restart: unless-stopped
+
+networks:
+  vpn:
+    external: true

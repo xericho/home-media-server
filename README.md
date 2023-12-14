@@ -17,6 +17,9 @@ This is my automated home media server documentation.
 - NZBFinder (indexer)
 - NZBgeek (optional indexer)
 
+### Torrent 
+- qBittorrent (downloader)
+
 ### Docker containers
 - NZBget (downloader)
 - Overseerr (automated content requester, integrates with Sonarr, Radarr and Plex)
@@ -27,6 +30,7 @@ This is my automated home media server documentation.
 - Bazarr (subtitle grabber)
 - Readarr (ebook/audiobook grabber)
 - Ntfy (notfications)
+- Gluetun (VPN client)
 
 ### Authentication/Authorization
 - Cloudflare Tunnel
@@ -45,8 +49,11 @@ home-media-server
 ├── docker-compose.yml
 ├── docker-compose.cftunnel.yml
 ├── docker-compose.ntfy.yml
+├── docker-compose.gluetun.yml
 ├── .env
 ├── ntfy
+├── qbittorrent
+├── gluetun
 ├── nzbget
 ├── overseerr
 ├── plex
@@ -62,7 +69,8 @@ This is your folder structure for all your media files (e.g. ~/media_files/). NZ
 ```
 media_files
 ├── usenet
-├── torrents (optional)
+├── torrents 
+├── recycle 
 └── libraries
     ├── movies
     ├── tv
@@ -108,6 +116,13 @@ notifications for Radarr and Sonarr by setting up your `ntfy/.env` and
 going to Radarr/Sonarr > Settings > Connect > Add > Custom Script 
 and select the corresponding script in `ntfy/`. 
 
+### VPN + qBittorrent
+If you want to torrent, you must use a VPN so your downloads are hidden
+from your Internet Service Provider (ISP). The `docker-compose.glutun.yml` file
+uses the gluetun container to connect to your VPN provider and the qBittorrent 
+container sits behind gluetun so that all network goes through the VPN. 
+This acts as an automatic kill switch -- if the VPN connection drops in gluetun, so does 
+all internet capabilities for qBittorrent. 
 
 ## Resources
 - https://academy.pointtosource.com/containers/all-in-one-media-server-docker
@@ -120,3 +135,5 @@ and select the corresponding script in `ntfy/`.
 - https://github.com/seanap/Plex-Audiobook-Guide
 - https://docs.ntfy.sh/install/
 - https://github.com/nickexyz/ntfy-shellscripts
+- https://github.com/qdm12/gluetun-wiki/blob/main/setup/test-your-setup.md
+- https://github.com/qbittorrent/search-plugins/wiki/Unofficial-search-plugins

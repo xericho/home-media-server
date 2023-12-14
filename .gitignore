@@ -10,5 +10,7 @@ npm/
 fail2ban/
 authentik/
 readarr/
+gluetun/
+qbittorrent/
 server.yml
 user.db
