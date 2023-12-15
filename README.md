@@ -122,7 +122,13 @@ from your Internet Service Provider (ISP). The `docker-compose.glutun.yml` file
 uses the gluetun container to connect to your VPN provider and the qBittorrent 
 container sits behind gluetun so that all network goes through the VPN. 
 This acts as an automatic kill switch -- if the VPN connection drops in gluetun, so does 
-all internet capabilities for qBittorrent. 
+all internet capabilities for qBittorrent. A couple tips:
+- Depending on your VPN, use a server dedicated for torrents or else it won't work. 
+- You can test that the VPN is working in qBittorrent using [a torrent IP checker](https://torguard.net/checkmytorrentipaddress.php).
+- Use [hardlinks](https://trash-guides.info/Hardlinks/Hardlinks-and-Instant-Moves/) so your downloads don't take double the disk space.
+- Disable auto-seed by going to Settings > BitTorrent > When ratio reaches 0 > then **Pause torrent**.
+  - Select Pause torrent instead of Removing torrent so Radarr/Sonarr can delete the torrent for you.
+  - For more info, read [this](https://wiki.servarr.com/radarr/settings#completed-download-handling).
 
 ## Resources
 - https://academy.pointtosource.com/containers/all-in-one-media-server-docker

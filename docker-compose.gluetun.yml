@@ -20,6 +20,7 @@ services:
       - ./gluetun:/gluetun
     networks:
       vpn:
+      media_server:
 
   qbit:
     image: linuxserver/qbittorrent:4.6.2
@@ -31,7 +32,7 @@ services:
       - WEBUI_PORT=8090
     volumes:
       - ./qbittorrent:/config
-      - $MEDIADIR/torrents:/downloads:rw
+      - $MEDIADIR/torrents:/media/torrents
     network_mode: service:gluetun # run on the vpn network
     depends_on:
       gluetun:
@@ -40,4 +41,6 @@ services:
 
 networks:
   vpn:
+    external: true
+  media_server:
     external: true
