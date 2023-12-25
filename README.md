@@ -42,6 +42,9 @@ This is my automated home media server documentation.
 ### Notification App 
 - Ntfy (available on iOS and Android)
 
+## System Architecture
+![System Architecture](./media/architecture.jpg)
+
 ## Folder structure
 There will be a folder for each docker container in `docker-compose.yml` so they can be blind mounted to. This is make backups and configurations easier to manage. 
 ```
