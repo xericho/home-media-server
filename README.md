@@ -17,12 +17,10 @@ This is my automated home media server documentation.
 - NZBFinder (indexer)
 - NZBgeek (optional indexer)
 
-### Torrent 
-- qBittorrent (downloader)
-
 ### Docker containers
-- NZBget (downloader)
-- Overseerr (automated content requester, integrates with Sonarr, Radarr and Plex)
+- NZBget (usenet downloader)
+- qBittorrent (torrent downloader)
+- Overseerr (automated content requester, integrates with the *arrs and Plex)
 - Plex (media server and player)
 - Prowlarr (index manager for the *arrs)
 - Radarr (movie grabber)
@@ -32,12 +30,12 @@ This is my automated home media server documentation.
 - Ntfy (notfications)
 - Gluetun (VPN client)
 
-### Authentication/Authorization
-- Cloudflare Tunnel
-- Cloudflare Access
+### Cloudflare
+- Cloudflare Tunnel (prevents need to open ports to internet)
+- Cloudflare Access (authenticaton)
 
 ### Audiobook App
-- Prologue (connects with Plex)
+- Prologue (connects to Plex)
 
 ### Notification App 
 - Ntfy (available on iOS and Android)
@@ -68,7 +66,7 @@ home-media-server
 ```
 
 ## Media folder structure 
-This is your folder structure for all your media files (e.g. ~/media_files/). NZBGet will put all downloads in the `usenet` directory and the *arrs will move them in the corresponding folders in `libraries`. Plex will only be synced to the `libraries` directory.
+This is your folder structure for all your media files (e.g. `~/media_files/`). NZBGet will put all downloads in the `usenet` directory and the *arrs will move them in the corresponding folders in `libraries`. Plex will only be synced to the `libraries` directory.
 ```
 media_files
 ├── usenet
@@ -86,6 +84,7 @@ Configure the `.env` file and run the main docker compose file:
 ```
 sudo docker compose up -d
 ```
+After it's confirmed to be working locally, you can start up the other compose files. 
 
 ### Plex
 Configure this to remove the 1Mbps limit when watching media outside LAN.
@@ -130,7 +129,7 @@ all internet capabilities for qBittorrent. A couple tips:
 - You can test that the VPN is working in qBittorrent using [a torrent IP checker](https://torguard.net/checkmytorrentipaddress.php).
 - Use [hardlinks](https://trash-guides.info/Hardlinks/Hardlinks-and-Instant-Moves/) so your downloads don't take double the disk space.
 - Disable auto-seed by going to Settings > BitTorrent > When ratio reaches 0 > then **Pause torrent**.
-  - Select Pause torrent instead of Removing torrent so Radarr/Sonarr can delete the torrent for you.
+  - Select "Pause torrent" instead of "Removing torrent" so Radarr/Sonarr can handle torrent deletion for you.
   - For more info, read [this](https://wiki.servarr.com/radarr/settings#completed-download-handling).
 
 ## Resources
