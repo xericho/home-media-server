@@ -16,7 +16,7 @@ services:
 
   plex: # Media Server
     container_name: plex
-    image: cr.hotio.dev/hotio/plex
+    image: hotio/plex:latest
     restart: unless-stopped
     logging:
       driver: json-file
@@ -34,7 +34,7 @@ services:
     network_mode: host
 
   prowlarr: # indexer manager for the *arrs
-    image: ghcr.io/linuxserver/prowlarr:develop
+    image: linuxserver/prowlarr:latest
     container_name: prowlarr
     environment:
       - PUID=$PUID
@@ -47,7 +47,7 @@ services:
     restart: unless-stopped
 
   radarr: # movie search agent
-    image: ghcr.io/linuxserver/radarr
+    image: linuxserver/radarr:latest
     container_name: radarr
     environment:
       - PUID=$PUID
@@ -63,7 +63,7 @@ services:
     restart: unless-stopped
 
   sonarr: # TV show search agent
-    image: ghcr.io/linuxserver/sonarr:latest
+    image: linuxserver/sonarr:latest
     container_name: sonarr
     environment:
       - PUID=$PUID
@@ -79,7 +79,7 @@ services:
     restart: unless-stopped
 
   bazarr: # subtitle grabber
-    image: ghcr.io/linuxserver/bazarr
+    image: linuxserver/bazarr:latest
     container_name: bazarr
     environment:
       - PUID=$PUID
@@ -93,7 +93,7 @@ services:
     restart: unless-stopped
 
   readarr: # ebook/audiobook grabber
-    image: lscr.io/linuxserver/readarr:develop
+    image: linuxserver/readarr:develop
     container_name: readarr
     environment:
       - PUID=$PUID
@@ -107,7 +107,7 @@ services:
     restart: unless-stopped
 
   nzbget: # usenet download agent
-    image: ghcr.io/linuxserver/nzbget
+    image: linuxserver/nzbget:latest
     container_name: nzbget
     environment:
       - PUID=$PUID
@@ -124,4 +124,3 @@ networks:
   default:
     name: media_server
     external: true
-
