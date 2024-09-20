@@ -1,9 +1,7 @@
-version: "3.5"
-
 services:
   ntfy:
     container_name: ntfy
-    image: binwiederhier/ntfy 
+    image: binwiederhier/ntfy
     command: serve
     volumes:
       - /var/cache/ntfy:/var/cache/ntfy
@@ -20,4 +18,3 @@ networks:
   default:
     name: media_server
     external: true
-

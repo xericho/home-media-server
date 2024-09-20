@@ -1,5 +1,3 @@
-version: "3.5"
-
 services:
   overseerr: # media requesting tool
     image: sctx/overseerr:latest

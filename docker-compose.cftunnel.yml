@@ -1,11 +1,9 @@
-version: "3.5"
-
 services:
   tunnel:
     container_name: cloudflared-tunnel
     image: cloudflare/cloudflared
     restart: unless-stopped
-    command: tunnel --no-autoupdate run
+    command: tunnel run
     environment:
       - TUNNEL_TOKEN=$CF_TUNNEL_TOKEN
 
@@ -13,4 +11,3 @@ networks:
   default:
     name: media_server
     external: true
-

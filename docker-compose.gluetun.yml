@@ -1,5 +1,3 @@
-version: "3.5"
-
 services:
   gluetun:
     image: qmcgaw/gluetun:v3.36
@@ -21,6 +19,7 @@ services:
     networks:
       vpn:
       media_server:
+    restart: unless-stopped
 
   qbit:
     image: linuxserver/qbittorrent:4.6.2
