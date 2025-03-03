@@ -132,6 +132,9 @@ all internet capabilities for qBittorrent. A couple tips:
   - Select "Pause torrent" instead of "Removing torrent" so Radarr/Sonarr can handle torrent deletion for you.
   - For more info, read [this](https://wiki.servarr.com/radarr/settings#completed-download-handling).
 
+## Updating
+Run `./update_containers.sh [docker compose name]`. For example, `./update_containers.sh cftunnel` to update the containers in `docker-compose.cftunnel.yml`.
+
 ## Resources
 - https://academy.pointtosource.com/containers/all-in-one-media-server-docker
 - https://wiki.servarr.com/
