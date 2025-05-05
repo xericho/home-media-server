@@ -1,13 +1,40 @@
 services:
+  # vpn:
+  #   container_name: vpn
+  #   image: dperson/openvpn-client
+  #   # cap_add, security_opt, and volume required for the image to function
+  #   cap_add:
+  #     - net_admin
+  #   environment:
+  #     - TZ=PST8PDT
+  #     - VPN_AUTH=KS2-3032f11d14a42772081aeacf6fc63e10;Y7EupCuXrciR
+  #     - FIREWALL=""
+  #   networks:
+  #     - media_server
+  #   # if using '-d' or 'DNS' you can't enable the `read_only: true` option
+  #   read_only: true
+  #   tmpfs:
+  #     - /run
+  #     - /tmp
+  #   restart: unless-stopped
+  #   security_opt:
+  #     - label:disable
+  #   stdin_open: true
+  #   tty: true
+  #   volumes:
+  #     - /dev/net:/dev/net:z
+  #     - ./vpn:/vpn
+
   gluetun:
-    image: qmcgaw/gluetun:v3.36
+    image: qmcgaw/gluetun:v3.40
     container_name: gluetun
     cap_add:
       - NET_ADMIN
     ports:
       - 8090:8090
     environment:
-      - FIREWALL=off
+      # - FIREWALL=off
+      - UPDATER_PERIOD=24h
       - VPN_SERVICE_PROVIDER=custom
       - OPENVPN_CUSTOM_CONFIG=/gluetun/custom.conf
       - OPENVPN_CIPHERS=AES-256-CBC
@@ -15,9 +42,9 @@ services:
       - OPENVPN_USER=$OPENVPN_USER
       - OPENVPN_PASSWORD=$OPENVPN_PASSWORD
     volumes:
+      - /dev/net:/dev/net:z
       - ./gluetun:/gluetun
     networks:
-      vpn:
       media_server:
     restart: unless-stopped
 
@@ -39,7 +66,4 @@ services:
     restart: unless-stopped
 
 networks:
-  vpn:
-    external: true
   media_server:
-    external: true

@@ -11,7 +11,10 @@ npm/
 fail2ban/
 authentik/
 readarr/
-gluetun/
+gluetun*/
 qbittorrent/
+jellyfin/
+vpn/
 server.yml
 user.db
+wg*.conf
