@@ -15,3 +15,5 @@ gluetun/
 qbittorrent/
 server.yml
 user.db
+jellyfin/
+*.conf
