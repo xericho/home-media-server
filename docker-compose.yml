@@ -14,7 +14,7 @@ services:
 
   plex: # Media Server
     container_name: plex
-    image: hotio/plex:latest
+    image: ghcr.io/hotio/plex:latest
     restart: unless-stopped
     logging:
       driver: json-file
@@ -91,7 +91,7 @@ services:
     restart: unless-stopped
 
   readarr: # ebook/audiobook grabber
-    image: linuxserver/readarr:develop
+    image: linuxserver/readarr:0.4.18-develop
     container_name: readarr
     environment:
       - PUID=$PUID
@@ -149,6 +149,8 @@ services:
     environment:
       - TZ=$TZ
       - WATCHTOWER_CLEANUP=true
+      # Update daily at 7am
+      - WATCHTOWER_SCHEDULE=0 0 7 * * *
       - WATCHTOWER_NOTIFICATION_URL=ntfy://$NTFY_USER:$NTFY_PASSWORD@$NTFY_URL
     restart: unless-stopped
 
