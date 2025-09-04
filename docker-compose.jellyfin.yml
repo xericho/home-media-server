@@ -1,0 +1,25 @@
+services:
+  jellyfin: # media server
+    container_name: jellyfin
+    image: jellyfin/jellyfin:latest
+    restart: unless-stopped
+    network_mode: host
+    group_add:
+      - 110 # render group
+    devices:
+      - /dev/dri/renderD128:/dev/dri/renderD128
+    volumes:
+      - ./jellyfin:/config
+      - $MEDIADIR:/media
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+      - TZ=$TZ
+      # - JELLYFIN_PublishedServerUrl=http://jellyfin.local
+    ports:
+      - 8096:8096
+
+networks:
+  default:
+    name: media_server
+    external: true

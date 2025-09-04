@@ -11,8 +11,6 @@ services:
     ports:
       - 5055:5055
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   plex: # Media Server
     container_name: plex
@@ -32,8 +30,6 @@ services:
       - ./plex:/config
       - $PLEXMEDIA:/data/media
     network_mode: host
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   prowlarr: # indexer manager for the *arrs
     image: linuxserver/prowlarr:latest
@@ -47,8 +43,6 @@ services:
     ports:
       - 9696:9696
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   radarr: # movie search agent
     image: linuxserver/radarr:latest
@@ -65,8 +59,6 @@ services:
     ports:
       - 7878:7878
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   sonarr: # TV show search agent
     image: linuxserver/sonarr:latest
@@ -83,8 +75,6 @@ services:
     ports:
       - 8989:8989
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   bazarr: # subtitle grabber
     image: linuxserver/bazarr:latest
@@ -99,8 +89,6 @@ services:
     ports:
       - 6767:6767
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   readarr: # ebook/audiobook grabber
     image: linuxserver/readarr:develop
@@ -115,8 +103,6 @@ services:
     ports:
       - 8787:8787
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   nzbget: # usenet download agent
     image: linuxserver/nzbget:latest
@@ -131,8 +117,6 @@ services:
     ports:
       - 6789:6789
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   tunnel: # remote connections
     container_name: cloudflared-tunnel
@@ -141,8 +125,6 @@ services:
     command: tunnel run
     environment:
       - TUNNEL_TOKEN=$CF_TUNNEL_TOKEN
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   ntfy: # notifications
     container_name: ntfy
@@ -158,8 +140,6 @@ services:
       - PGID=$PGID
       - TZ=$TZ
     restart: unless-stopped
-    labels:
-      - "com.centurylinklabs.watchtower.enable=true"
 
   watchtower: # container updater
     container_name: watchtower
@@ -169,7 +149,6 @@ services:
     environment:
       - TZ=$TZ
       - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_LABEL_ENABLE=true
       - WATCHTOWER_NOTIFICATION_URL=ntfy://$NTFY_USER:$NTFY_PASSWORD@$NTFY_URL
     restart: unless-stopped
 
