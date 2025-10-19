@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
 
   qbit:
-    image: linuxserver/qbittorrent:4.6.2
+    image: lscr.io/linuxserver/qbittorrent:4.6.2
     container_name: qbit
     environment:
       - PUID=$PUID
