@@ -30,6 +30,8 @@ services:
       - ./plex:/config
       - $PLEXMEDIA:/data/media
     network_mode: host
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
 
   prowlarr: # indexer manager for the *arrs
     image: lscr.io/linuxserver/prowlarr:latest
@@ -143,14 +145,14 @@ services:
 
   watchtower: # container updater
     container_name: watchtower
-    image: containrrr/watchtower:latest
+    image: nickfedor/watchtower:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       - TZ=$TZ
       - WATCHTOWER_CLEANUP=true
-      # Update daily at 7am
-      - WATCHTOWER_SCHEDULE=0 0 7 * * *
+      # Update daily at 8am
+      - WATCHTOWER_SCHEDULE=0 0 8 * * *
       - WATCHTOWER_NOTIFICATION_URL=ntfy://$NTFY_USER:$NTFY_PASSWORD@$NTFY_URL
     restart: unless-stopped
 
